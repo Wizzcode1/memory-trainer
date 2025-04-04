@@ -12,6 +12,13 @@ import {TimerBarComponent} from '../timer-bar/timer-bar.component';
 import {LivesDisplayComponent} from '../lives-display/lives-display.component';
 import {GameOverComponent} from '../game-over/game-over.component';
 
+enum GameState {
+  MENU,
+  SHOWING_DIGITS,
+  GUESSING,
+  GAME_OVER
+}
+
 @Component({
   selector: 'app-memory-game',
   standalone: true,
@@ -20,16 +27,15 @@ import {GameOverComponent} from '../game-over/game-over.component';
   styleUrls: ['./memory-game.component.scss']
 })
 export class MemoryGameComponent implements OnInit {
-  gameStarted = false;
-  isGameOver = false;
+
+  state: GameState = GameState.MENU;
+
   sequenceLength = 4;
   sequenceMinLength = 4;
   sequenceMaxLength = 9;
   currentSequence: number[] = [];
   userInput: string[] = [];
   score = 0;
-  showNumbers = false;
-  inputVisible = false;
 
   // timer
   timerDuration = 5; // in seconds
@@ -52,32 +58,37 @@ export class MemoryGameComponent implements OnInit {
   }
 
   startGame(): void {
-    this.gameStarted = true;
+    this.score = 0;
+    this.sequenceLength = 4;
+    this.lives = this.maxLives;
+    this.userInput = [];
+    this.state = GameState.SHOWING_DIGITS;
     this.startRound();
   }
 
   startRound(): void {
-    this.currentSequence = Array.from({length: this.sequenceLength}, () =>
+    this.currentSequence = this.generateSequence(this.sequenceLength);
+    this.userInput = [];
+
+    this.state = GameState.SHOWING_DIGITS;
+
+    setTimeout(() => {
+      if (this.state === GameState.SHOWING_DIGITS) {
+        this.startGuessingPhase();
+      }
+    }, this.timerDuration * 1000);
+  }
+
+  private generateSequence(sequenceLength: number) {
+    return Array.from({length: sequenceLength}, () =>
       Math.floor(Math.random() * 10)
     );
-    this.showNumbers = true;
-    this.inputVisible = false;
+  }
 
-    setTimeout(() => {
-      this.showNumbers = false;
-      this.inputVisible = true;
-
-      setTimeout(() => this.focusFirstInput(), 0);
-    }, 5000);
-
-    setTimeout(() => {
-      this.showNumbers = false;
-      this.inputVisible = true;
-
-      this.startTimer();
-      setTimeout(() => this.focusFirstInput(), 0);
-    }, this.timerDuration * 1000);
-
+  startGuessingPhase(): void {
+    this.state = GameState.GUESSING;
+    this.startTimer();
+    setTimeout(() => this.focusFirstInput(), 0);
   }
 
   checkAnswer(): void {
@@ -109,22 +120,12 @@ export class MemoryGameComponent implements OnInit {
   }
 
   triggerGameOver(): void {
-    this.gameOverData = {
-      score: this.score,
-      lives: this.maxLives,
-    };
-    this.inputVisible = false;
-    this.showNumbers = false;
-    this.isGameOver = true;
+    this.gameOverData = { score: this.score, lives: this.maxLives };
+    this.state = GameState.GAME_OVER;
   }
 
   resetGame(): void {
-    this.gameStarted = false;
-    this.isGameOver = false;
-    this.lives = this.maxLives;
-    this.sequenceLength = 4;
-    this.score = 0;
-    this.userInput = [];
+    this.startGame(); // Resets everything and sets state to MENU → SHOWING_DIGITS
   }
 
   onDigitInput(index: number, currentInput: HTMLInputElement, event?: KeyboardEvent): void {

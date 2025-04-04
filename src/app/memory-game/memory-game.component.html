@@ -1,24 +1,22 @@
-<app-start-menu *ngIf="!gameStarted" (gameStarted)="startGame()">
-</app-start-menu>
+<app-start-menu *ngIf="state === 0" (gameStarted)="startGame()"></app-start-menu>
 
 <app-game-over
-  *ngIf="isGameOver"
+  *ngIf="state === 3"
   [data]="gameOverData"
   (tryAgain)="resetGame()"
 ></app-game-over>
 
-
-<div *ngIf="gameStarted && !isGameOver" class="game-container">
+<div *ngIf="state === 1 || state === 2" class="game-container">
   <h2>Memory Trainer 🧠</h2>
   <p>Score: {{ score }}</p>
 
   <app-lives-display [lives]="lives" [maxLives]="maxLives"></app-lives-display>
 
-  <div *ngIf="showNumbers">
+  <div *ngIf="state === 1">
     <p style="font-weight: bold;">Remember the digits!</p>
   </div>
 
-  <div *ngIf="showNumbers" class="input-row">
+  <div *ngIf="state === 1" class="input-row">
     <input
       *ngFor="let digit of currentSequence"
       [value]="digit"
@@ -28,7 +26,7 @@
     />
   </div>
 
-  <ng-container *ngIf="inputVisible">
+  <ng-container *ngIf="state === 2">
     <div class="input-section">
       <div class="input-row">
         <input
@@ -41,16 +39,14 @@
           (input)="onDigitInput(i, inputBox)"
           (keydown)="onDigitInput(i, inputBox, $event)"
         />
-
       </div>
       <button #submitButton class="button-style focused-style" (click)="checkAnswer()">Submit</button>
     </div>
   </ng-container>
-
 </div>
 
 <app-timer-bar
-  *ngIf="inputVisible"
+  *ngIf="state === 2"
   [duration]="timerDuration"
   (timeout)="onTimeExpired()"
 ></app-timer-bar>
