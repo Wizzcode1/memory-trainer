@@ -1,8 +1,11 @@
 <app-start-menu *ngIf="!gameStarted" (gameStarted)="startGame()">
 </app-start-menu>
+
 <div *ngIf="gameStarted" class="game-container">
   <h2>Memory Trainer 🧠</h2>
   <p>Score: {{ score }}</p>
+
+  <app-lives-display [lives]="lives" [maxLives]="maxLives"></app-lives-display>
 
   <div *ngIf="showNumbers">
     <p style="font-weight: bold;">Remember the digits!</p>
@@ -28,3 +31,9 @@
   </ng-container>
 
 </div>
+
+<app-timer-bar
+  *ngIf="inputVisible"
+  [duration]="timerDuration"
+  (timeout)="onTimeExpired()"
+></app-timer-bar>

@@ -1,0 +1,7 @@
+<div class="timer-bar-wrapper">
+  <div
+    class="timer-bar"
+    [style.width.%]="(timeLeft / duration) * 100"
+  ></div>
+  <div class="timer-text">{{ timeLeft.toFixed(1) }}s</div>
+</div>
