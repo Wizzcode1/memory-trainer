@@ -1,0 +1,14 @@
+<div class="game-container">
+  <h2>Memory Trainer 🧠</h2>
+  <p>Score: {{ score }}</p>
+
+  <div *ngIf="showNumbers" class="sequence">
+    <span *ngFor="let digit of currentSequence">{{ digit }}</span>
+  </div>
+
+  <div *ngIf="inputVisible" class="input-section">
+    <input *ngFor="let digit of currentSequence; let i = index"
+           [(ngModel)]="userInput[i]" maxlength="1" type="text" class="digit-input" />
+    <button (click)="checkAnswer()">Submit</button>
+  </div>
+</div>
