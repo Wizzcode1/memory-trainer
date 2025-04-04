@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import { StartMenuComponent } from '../start-menu/start-menu.component';
 
 @Component({
   selector: 'app-memory-game',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, StartMenuComponent],
   templateUrl: './memory-game.component.html',
   styleUrls: ['./memory-game.component.scss']
 })
 export class MemoryGameComponent implements OnInit {
+  gameStarted = false;
   sequenceLength = 4;
   currentSequence: number[] = [];
   userInput: string[] = [];
@@ -18,6 +20,10 @@ export class MemoryGameComponent implements OnInit {
   inputVisible = false;
 
   ngOnInit(): void {
+  }
+
+  startGame(): void {
+    this.gameStarted = true;
     this.startRound();
   }
 
@@ -42,4 +48,12 @@ export class MemoryGameComponent implements OnInit {
     this.userInput = [];
     this.startRound();
   }
+
+  onDigitInput(index: number, currentInput: HTMLInputElement) {
+    const nextInput = currentInput.nextElementSibling as HTMLInputElement | null;
+    if (nextInput && currentInput.value.length === 1) {
+      nextInput.focus();
+    }
+  }
+
 }
