@@ -4,6 +4,10 @@
   <h2>Memory Trainer 🧠</h2>
   <p>Score: {{ score }}</p>
 
+  <div *ngIf="showNumbers">
+    <p style="font-weight: bold;">Remember the digits!</p>
+  </div>
+
   <div *ngIf="showNumbers" class="sequence">
     <span *ngFor="let digit of currentSequence">{{ digit }}</span>
   </div>
@@ -15,11 +19,11 @@
         [(ngModel)]="userInput[i]"
         maxlength="1"
         type="text"
-        class="digit-input"
+        class="digit-input focused-style"
         #inputBox
         (input)="onDigitInput(i, inputBox)"
       />
-      <button (click)="checkAnswer()">Submit</button>
+      <button class="button-style focused-style" (click)="checkAnswer()">Submit</button>
     </div>
   </ng-container>
 

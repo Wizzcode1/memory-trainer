@@ -1,14 +1,10 @@
-.game-container {
-  max-width: 400px;
-  margin: auto;
-  text-align: center;
-  font-family: sans-serif;
-}
+@import '../shared/common-styles';
 
 .sequence {
-  font-size: 2em;
+  font-size: 2.5rem;
   letter-spacing: 10px;
   margin: 20px 0;
+  font-weight: 600;
 }
 
 .input-section {
@@ -16,8 +12,19 @@
 }
 
 .digit-input {
-  width: 30px;
-  font-size: 1.5em;
+  width: 40px;
+  height: 50px;
+  font-size: 1.8rem;
   text-align: center;
   margin: 5px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  caret-color: transparent;
 }
+
+.focused-style:focus {
+  box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.6); // warm amber glow
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
