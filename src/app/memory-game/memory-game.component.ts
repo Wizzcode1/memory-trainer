@@ -23,7 +23,8 @@ export class MemoryGameComponent implements OnInit {
   gameStarted = false;
   isGameOver = false;
   sequenceLength = 4;
-  sequenceMaxLength = 8;
+  sequenceMinLength = 4;
+  sequenceMaxLength = 9;
   currentSequence: number[] = [];
   userInput: string[] = [];
   score = 0;
@@ -36,7 +37,7 @@ export class MemoryGameComponent implements OnInit {
   timerInterval: any;
 
   // lives
-  lives = 1;
+  lives = 3;
   maxLives = 3;
 
   gameOverData = {
@@ -89,6 +90,9 @@ export class MemoryGameComponent implements OnInit {
       }
       this.startNextRound();
     } else {
+      if (this.sequenceLength > this.sequenceMinLength) {
+        this.sequenceLength--;
+      }
       this.lives--;
 
       if (this.lives <= 0) {
@@ -123,10 +127,17 @@ export class MemoryGameComponent implements OnInit {
     this.userInput = [];
   }
 
-  onDigitInput(index: number, currentInput: HTMLInputElement): void {
+  onDigitInput(index: number, currentInput: HTMLInputElement, event?: KeyboardEvent): void {
+    const value = currentInput.value;
     const nextInput = this.inputBoxes.get(index + 1)?.nativeElement;
+    const prevInput = this.inputBoxes.get(index - 1)?.nativeElement;
 
-    if (currentInput.value.length === 1) {
+    if (event?.key === 'Backspace' && value.length === 0) {
+      prevInput?.focus();
+      return;
+    }
+
+    if (value.length === 1) {
       if (nextInput) {
         nextInput.focus();
       } else {

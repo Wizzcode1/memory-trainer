@@ -18,8 +18,14 @@
     <p style="font-weight: bold;">Remember the digits!</p>
   </div>
 
-  <div *ngIf="showNumbers" class="sequence">
-    <span *ngFor="let digit of currentSequence">{{ digit }}</span>
+  <div *ngIf="showNumbers" class="input-row">
+    <input
+      *ngFor="let digit of currentSequence"
+      [value]="digit"
+      type="text"
+      class="digit-input"
+      disabled
+    />
   </div>
 
   <ng-container *ngIf="inputVisible">
@@ -33,7 +39,9 @@
           class="digit-input focused-style"
           #inputBox
           (input)="onDigitInput(i, inputBox)"
+          (keydown)="onDigitInput(i, inputBox, $event)"
         />
+
       </div>
       <button #submitButton class="button-style focused-style" (click)="checkAnswer()">Submit</button>
     </div>

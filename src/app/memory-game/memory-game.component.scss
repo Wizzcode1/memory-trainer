@@ -14,13 +14,13 @@
 .input-row {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 5px;
   margin-bottom: 16px;
 }
 
 .digit-input {
-  width: 48px;
-  height: 54px;
+  width: 40px;
+  height: 50px;
   font-size: 1.8rem;
   text-align: center;
   border: 2px solid #ccc;
@@ -41,3 +41,20 @@
   transition: box-shadow 0.2s ease;
 }
 
+.input-row input[disabled] {
+  background-color: white;
+  color: black;
+  opacity: 0.8;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}

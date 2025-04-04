@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {LivesDisplayComponent} from '../lives-display/lives-display.component';
 
 @Component({
@@ -13,6 +13,12 @@ import {LivesDisplayComponent} from '../lives-display/lives-display.component';
 export class GameOverComponent {
   @Input() data!: { score: number; lives: number };
   @Output() tryAgain = new EventEmitter<void>();
+
+  @HostListener('document:keydown.enter', ['$event'])
+  handleEnter(event: KeyboardEvent): void {
+    event.preventDefault();
+    this.tryAgain.emit();
+  }
 
   onTryAgain(): void {
     this.tryAgain.emit();
