@@ -1,5 +1,6 @@
 <div class="game-over">
   <h2>You lost 😵</h2>
-  <p>Your score was: {{ score }}</p>
+  <app-lives-display [lives]="0" [maxLives]="data.lives"></app-lives-display>
+  <p>Your score was: {{ data.score }}</p>
   <button class="button-style" (click)="onTryAgain()">Try Again</button>
 </div>

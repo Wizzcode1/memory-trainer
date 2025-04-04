@@ -3,7 +3,7 @@
 
 <app-game-over
   *ngIf="isGameOver"
-  [score]="score"
+  [data]="gameOverData"
   (tryAgain)="resetGame()"
 ></app-game-over>
 

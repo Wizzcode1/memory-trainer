@@ -13,16 +13,5 @@ import {NgForOf} from '@angular/common';
 export class LivesDisplayComponent {
   @Input() lives = 0;
   @Input() maxLives = 0;
-  hearts: string[] = [];
-
-  get remaining(): number[] {
-    return Array(this.lives).fill(1);
-  }
-
-  get lost(): number[] {
-    return Array(this.maxLives - this.lives).fill(1);
-  }
-
-
 
 }

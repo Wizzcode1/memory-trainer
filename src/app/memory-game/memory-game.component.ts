@@ -36,8 +36,13 @@ export class MemoryGameComponent implements OnInit {
   timerInterval: any;
 
   // lives
-  lives = 2;
-  maxLives = 2;
+  lives = 1;
+  maxLives = 3;
+
+  gameOverData = {
+    score: 0,
+    lives: 0,
+  };
 
   @ViewChildren('inputBox') inputBoxes!: QueryList<ElementRef<HTMLInputElement>>;
   @ViewChild('submitButton') submitButton!: ElementRef<HTMLButtonElement>;
@@ -100,11 +105,13 @@ export class MemoryGameComponent implements OnInit {
   }
 
   triggerGameOver(): void {
+    this.gameOverData = {
+      score: this.score,
+      lives: this.maxLives,
+    };
     this.inputVisible = false;
     this.showNumbers = false;
     this.isGameOver = true;
-
-    // this.resetGame();
   }
 
   resetGame(): void {
