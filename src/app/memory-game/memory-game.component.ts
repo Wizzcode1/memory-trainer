@@ -3,23 +3,25 @@ import {
   OnInit,
   ViewChildren,
   QueryList,
-  ElementRef,
+  ElementRef, ViewChild,
 } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import { StartMenuComponent } from '../start-menu/start-menu.component';
-import { TimerBarComponent } from '../timer-bar/timer-bar.component';
-import { LivesDisplayComponent } from '../lives-display/lives-display.component';
+import {StartMenuComponent} from '../start-menu/start-menu.component';
+import {TimerBarComponent} from '../timer-bar/timer-bar.component';
+import {LivesDisplayComponent} from '../lives-display/lives-display.component';
+import {GameOverComponent} from '../game-over/game-over.component';
 
 @Component({
   selector: 'app-memory-game',
   standalone: true,
-  imports: [CommonModule, FormsModule, StartMenuComponent, TimerBarComponent, LivesDisplayComponent],
+  imports: [CommonModule, FormsModule, StartMenuComponent, TimerBarComponent, LivesDisplayComponent, GameOverComponent],
   templateUrl: './memory-game.component.html',
   styleUrls: ['./memory-game.component.scss']
 })
 export class MemoryGameComponent implements OnInit {
   gameStarted = false;
+  isGameOver = false;
   sequenceLength = 4;
   sequenceMaxLength = 8;
   currentSequence: number[] = [];
@@ -34,10 +36,11 @@ export class MemoryGameComponent implements OnInit {
   timerInterval: any;
 
   // lives
-  lives = 3;
-  maxLives = 3;
+  lives = 2;
+  maxLives = 2;
 
   @ViewChildren('inputBox') inputBoxes!: QueryList<ElementRef<HTMLInputElement>>;
+  @ViewChild('submitButton') submitButton!: ElementRef<HTMLButtonElement>;
 
   ngOnInit(): void {
   }
@@ -48,7 +51,7 @@ export class MemoryGameComponent implements OnInit {
   }
 
   startRound(): void {
-    this.currentSequence = Array.from({ length: this.sequenceLength }, () =>
+    this.currentSequence = Array.from({length: this.sequenceLength}, () =>
       Math.floor(Math.random() * 10)
     );
     this.showNumbers = true;
@@ -99,24 +102,34 @@ export class MemoryGameComponent implements OnInit {
   triggerGameOver(): void {
     this.inputVisible = false;
     this.showNumbers = false;
+    this.isGameOver = true;
 
-    this.resetGame();
+    // this.resetGame();
   }
 
   resetGame(): void {
     this.gameStarted = false;
+    this.isGameOver = false;
     this.lives = this.maxLives;
     this.sequenceLength = 4;
     this.score = 0;
     this.userInput = [];
   }
 
-  onDigitInput(index: number, currentInput: HTMLInputElement) {
-    const nextInput = currentInput.nextElementSibling as HTMLInputElement | null;
-    if (nextInput && currentInput.value.length === 1) {
-      nextInput.focus();
+  onDigitInput(index: number, currentInput: HTMLInputElement): void {
+    const nextInput = this.inputBoxes.get(index + 1)?.nativeElement;
+
+    if (currentInput.value.length === 1) {
+      if (nextInput) {
+        nextInput.focus();
+      } else {
+        setTimeout(() => {
+          this.submitButton?.nativeElement.focus();
+        }, 0);
+      }
     }
   }
+
 
   focusFirstInput(): void {
     const firstInput = this.inputBoxes.first;

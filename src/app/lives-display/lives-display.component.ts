@@ -11,8 +11,8 @@ import {NgForOf} from '@angular/common';
   styleUrls: ['./lives-display.component.scss']
 })
 export class LivesDisplayComponent {
-  @Input() lives = 2;
-  @Input() maxLives = 3;
+  @Input() lives = 0;
+  @Input() maxLives = 0;
   hearts: string[] = [];
 
   get remaining(): number[] {

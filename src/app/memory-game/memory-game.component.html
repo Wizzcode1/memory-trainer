@@ -1,7 +1,14 @@
 <app-start-menu *ngIf="!gameStarted" (gameStarted)="startGame()">
 </app-start-menu>
 
-<div *ngIf="gameStarted" class="game-container">
+<app-game-over
+  *ngIf="isGameOver"
+  [score]="score"
+  (tryAgain)="resetGame()"
+></app-game-over>
+
+
+<div *ngIf="gameStarted && !isGameOver" class="game-container">
   <h2>Memory Trainer 🧠</h2>
   <p>Score: {{ score }}</p>
 
@@ -17,16 +24,18 @@
 
   <ng-container *ngIf="inputVisible">
     <div class="input-section">
-      <input
-        *ngFor="let digit of currentSequence; let i = index"
-        [(ngModel)]="userInput[i]"
-        maxlength="1"
-        type="text"
-        class="digit-input focused-style"
-        #inputBox
-        (input)="onDigitInput(i, inputBox)"
-      />
-      <button class="button-style focused-style" (click)="checkAnswer()">Submit</button>
+      <div class="input-row">
+        <input
+          *ngFor="let digit of currentSequence; let i = index"
+          [(ngModel)]="userInput[i]"
+          maxlength="1"
+          type="text"
+          class="digit-input focused-style"
+          #inputBox
+          (input)="onDigitInput(i, inputBox)"
+        />
+      </div>
+      <button #submitButton class="button-style focused-style" (click)="checkAnswer()">Submit</button>
     </div>
   </ng-container>
 
